@@ -1,5 +1,9 @@
 /* Gia's qns:
-1) How come in the main function, in line 118 and 131, the input in the function are different? In line 118, it is just function () while in line 131, it is function(input). How do we actually identify what is the right 'input' to put in?
+1) How come in the main function, in line 141 and 155, the input in the function are different? In line 141, it is just function () while in line 155, it is function(input). How do we actually identify what is the right 'input' to put in?
+
+2) How come my P1 and P2 dice rolls are the same? Though I wrote code the same way that Bryan did in his video.
+
+3) I dont uds why is there a need for this line of code '// We want to clear current player roll array for the next player' in line 125. 
 
 
 /* Beat that! Game
@@ -29,7 +33,11 @@ iv) Then system should prompt player 2 to go.
 
 
 2. After player 1 is done, player 2 will go. The game mode will be player2State. Repeat steps 1, ii, iii. 
-  --> Since it is a repeat of player 1 steps. We should refactor the code so that the code is efficient. We can do this by using global variables for the current player, and output messages. ??
+  --> Since it is a repeat of player 1 steps. We should refactor the code so that the code is efficient. 
+  i) We can do this by using global variables to keep track of the current player, 
+  ii) and also an array to store the score of both players.
+  iii) Then we need to refactor the output messages to specifically address player 1 or player 2
+  iv) Then we write logic for Player 1 to go first then Player 2, and finally compare scores in next step. 
 
 
 3. After player 1 and player 2 are done, the system will compare both numbers and inform the outcome of who won. If player 1 has a same number as player 2, they draw. If player 1 has a higher number than player 2, they win.  Else, they lose. 
@@ -41,9 +49,23 @@ iv) Then system should prompt player 2 to go.
 // We set these game modes to remind us that these variables do not change.
 var gameMode1_userRollsDice = 'Game mode 1'
 var gameMode2_userPicksOrder = 'Game mode 2'
+var gameMode3_weCompareBothPlayersNumbers = 'Game mode 3'
 var gameMode = gameMode1_userRollsDice
 
-var playerDiceRollsArray = [];
+// We create an array that stores the 2 dice rolls of a player. 
+var playerDiceRollsInAnArray = [];
+
+// We create an array to store the scores of both players. 
+var bothPlayersNumbersInAnArray = []
+
+// We create a variable that represents a player's final number. 
+var playerNumber;
+
+// We create a variable that represents the current player.
+var currentPlayer;
+
+// We create global variable where currentPlayer is set to 1 because Player 1 starts first. 
+var currentPlayer = 1
 
 /* ======== HELPER FUNCTIONS ========
 
@@ -68,36 +90,42 @@ console.log ('Control flow: start of generating two dice rolls for player')
 
   // Create a loop where the system will keep adding a dice roll number into the playerDiceRollsArray until the counter hits 2. essentially adding 2 dice roll numbers into the array, since it will run counter = 0 and 1. 
   while (counter < 2 ){
-    playerDiceRollsArray.push(getDiceRoll())
+    playerDiceRollsInAnArray.push(getDiceRoll())
     counter = counter + 1
   }
-
+  console.log('This prints that the helper function genDiceRollsForPlayer works')
   // Return an output message that tells user about their pair of dices rolled.
-  return 'Hello Player 1, these are your dices rolled: ' + playerDiceRollsArray[0] + ' and ' + playerDiceRollsArray[1] + '<br>' + ' Next, enter 1 or 2 to pick the order of your dices.' 
+  return 'Hello Player ' + currentPlayer + ', these are your dices rolled: ' + playerDiceRollsInAnArray[0] + ' and ' + playerDiceRollsInAnArray[1] + '<br> Next, enter 1 or 2 to pick the order of your dices.' 
   }
   
+  // 2. Here, we are getting the player's final number by concatenating dice roll 1 and dice roll 2 numbers.
   var getPlayerNumber = function (playerInputOfChoiceOrder){
-
+  
     // Design an input validation, where anything other than 1 or 2 should return an error message. 
     if (playerInputOfChoiceOrder != 1 && playerInputOfChoiceOrder != 2){
-      console.log ('Control flow: This should run the input validation where user should only input 1 or 2.')
+      console.log ('Control flow: This runs the input validation where user should only input 1 or 2.')
       return 'Error. Please only input a value of 1 or 2.' 
     }
 
     // if input is equals to 1
     if (playerInputOfChoiceOrder == 1){
       console.log('Control flow: This prints that input is 1')
-      var playerNumber = Number(String(playerDiceRollsArray[0]) + String(playerDiceRollsArray[1]))
-      return 'This is your final number ' + playerNumber
+      var playerNumber = Number(String(playerDiceRollsInAnArray[0]) + String(playerDiceRollsInAnArray[1]))
     }
 
     // if input is equals to 2
     if (playerInputOfChoiceOrder == 2){
       console.log('Control flow: This prints that input is 2')
-      var playerNumber = Number(String(playerDiceRollsArray[1]) + String(playerDiceRollsArray[0]))
-      return 'This is your final number ' + playerNumber
+      var playerNumber = Number(String(playerDiceRollsInAnArray[1]) + String(playerDiceRollsInAnArray[0]))
     }
 
+    // We want to store the players 1 and 2 numbers in an array so we can call upon it later to compare these numbers. Player 1 number will be index 0, and Player 2 number will be index 1. 
+    bothPlayersNumbersInAnArray.push(playerNumber)
+
+    // We want to clear current player roll array for the next player
+    playerDiceRollsInAnArray = []
+
+      return 'Hi Player ' + currentPlayer + ', you chose the order of Dice ' + playerInputOfChoiceOrder + ' first. <br> So this is your final number ' + playerNumber + '.'
   }
 
 
@@ -108,7 +136,9 @@ console.log ('Control flow: start of generating two dice rolls for player')
 // Getting the 2 dices a player rolls
 // 1i) (Mode 1) Player 1 gets to roll 2 dices, diceRoll1 and diceRoll 2.  The system to return an output that tells user the dice rolls.
 var main = function (input) {
-  console.log('Check game state on submit button: ' + gameMode)
+  console.log('Check game state on submit button click: ' + gameMode)
+  console.log('Check which is the current player on submit button click: ' + currentPlayer)
+
   var myOutputValue = ''
 
   if (gameMode == gameMode1_userRollsDice){
@@ -116,7 +146,7 @@ var main = function (input) {
   
     // Return an output message that tells user about their pair of dices rolled. 
     myOutputValue = genDiceRollsForPlayer() ;
-    console.log('This prints that helper function genDiceRollsForPlayer works.')
+    console.log('This prints that helper function genDiceRollsForPlayer is called and working in the main function.')
 
     // Switch to game mode 2 where user picks order of the dices. 
     gameMode = gameMode2_userPicksOrder 
@@ -130,9 +160,25 @@ var main = function (input) {
 
     //Call get player number function.
     myOutputValue = getPlayerNumber(input)
-    console.log('This prints that helper function genPlayerNumber works.')
+    console.log('This prints that helper function getPlayerNumber works.')
 
-    return myOutputValue;
+    // Now, after Player 1 is done, we want to proceed to Player 2 to go. 
+    if (currentPlayer == 1){
+      console.log('Control flow: end of player 1 turn. Now it is player 2 turn.')
+      currentPlayer = 2
+      gameMode = gameMode1_userRollsDice
+      return myOutputValue + '<br> It is now player 2 turn.'
+
+    }
+
+    if (currentPlayer == 2){
+      console.log('Control flow: end of player 2 turn. Now we compare both players numbers.')
+
+      gameMode = gameMode3_weCompareBothPlayersNumbers
+      return myOutputValue + '<br> Next, click on submit button to compare the players numbers.'
+    }
+
+    
   }
 
 };
