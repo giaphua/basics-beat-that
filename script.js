@@ -1,9 +1,12 @@
 /* Gia's qns:
-1) How come in the main function, in line 141 and 155, the input in the function are different? In line 141, it is just function () while in line 155, it is function(input). How do we actually identify what is the right 'input' to put in?
+1) How come in the main function, in line 180 and 194 and 218, the input in the function are different? In line 180, it is just function () while in line 194, it is function(input). How do we actually identify what is the right 'input' to put in?
 
-2) How come my P1 and P2 dice rolls are the same? Though I wrote code the same way that Bryan did in his video.
+2) I dont uds why is there a need for this line of code '// We want to clear current player roll array for the next player' in line 125. 
 
-3) I dont uds why is there a need for this line of code '// We want to clear current player roll array for the next player' in line 125. 
+3) How come simply writing 'var currentPlayer = 1' already can make the code function in a way that it knows current player can hold value of 1 or 2? 
+
+4) I dont know how to dissect input validation error message line 110 from the extra message of '<br> It is now player 2 turn. Click on submit button to roll dices.' in line 202.
+
 
 
 /* Beat that! Game
@@ -48,9 +51,10 @@ iv) Then system should prompt player 2 to go.
 
 // We set these game modes to remind us that these variables do not change.
 var gameMode1_userRollsDice = 'Game mode 1'
+var gameMode = gameMode1_userRollsDice
 var gameMode2_userPicksOrder = 'Game mode 2'
 var gameMode3_weCompareBothPlayersNumbers = 'Game mode 3'
-var gameMode = gameMode1_userRollsDice
+
 
 // We create an array that stores the 2 dice rolls of a player. 
 var playerDiceRollsInAnArray = [];
@@ -140,14 +144,23 @@ console.log ('Control flow: start of generating two dice rolls for player')
       }
     // If Player 1 wins
     if (bothPlayersNumbersInAnArray[0] > bothPlayersNumbersInAnArray[1]){
-      return myOutputValue =  myOutputValue + '<br> Player 1 wins!'
+      return myOutputValue =  myOutputValue + '<br> Player 1 wins! <br><br> Click on Submit button to play again.'
       }
     // If player 2 wins
     if (bothPlayersNumbersInAnArray[0] < bothPlayersNumbersInAnArray[1]){
-      return myOutputValue =  myOutputValue + '<br> Player 2 wins!'
+      return myOutputValue =  myOutputValue + '<br> Player 2 wins! <br><br> Click on Submit button to play again.'
       }
     }
     
+  // 4. Lastly, we create a helper function where we restart the game. After results of first pair of players are out, we go back to Player 1, game mode 1 again. 
+    var restartGame = function (){
+      // We make the current player Player 1 again.
+      currentPlayer = 1
+      // We make the game mode to be game mode 1 where Player 1 gets to roll dices. 
+      gameMode = gameMode1_userRollsDice
+      // We clear the array of both players numbers so new numbers from new Player 1 and Player 2 can be stored in the array again. 
+      bothPlayersNumbersInAnArray = []
+    }
 
 
 
@@ -186,7 +199,7 @@ var main = function (input) {
       console.log('Control flow: end of player 1 turn. Now it is player 2 turn.')
       currentPlayer = 2
       gameMode = gameMode1_userRollsDice
-      return myOutputValue + '<br> It is now player 2 turn.'
+      return myOutputValue + '<br> It is now player 2 turn. Click on submit button to roll dices.'
     }
 
     if (currentPlayer == 2){
@@ -204,84 +217,20 @@ var main = function (input) {
     //Call get helper function comparePlayersNumbers.
     myOutputValue = comparePlayersNumbers()
     console.log('This prints that helper function comparePlayersNumbers works.')
+
+    // Call the helper function to restart the game. This should be placed after the numbers are compared, and before return output message (else it will never run).
+    restartGame();
+    console.log('This prints the current playe: ' + currentPlayer)
+    console.log('This prints the current game mode: ' + gameMode)
+    console.log('This prints the current numbers from both players in an array: ' + bothPlayersNumbersInAnArray)
+
     return myOutputValue
 
   }
 
 };
 
-  // 1ii) (Mode 2) Then, player picks the order. Player should indicate if they want 1st dice or 2nd dice to go first, by entering '1' or '2'. 
-  // --> User enters '1' or '2' to indicate if they want the 1st or 2nd number to be first in the order. 
-
-  // Only after user has clicked on submit button to get their 2 dice rolls, we can move from game mode 1 to game mode to 2, which is user picks order. 
-
-  // else if (gameMode == gameMode2_userPicksOrder) {
-  //   console.log('This should print Game mode 2. ' + gameMode)
-  //   var userChoiceOfOrder = input
-  //   console.log ('This prints user input as choice of order.')
-    
-  //   var playerNumber = ''
-
-  //   if (userChoiceOfOrder == '1') {
-  //     console.log ('Player has chosen the order of 1')
-  //     // If the player has chosen the order of 1, create player number starting with 1st dice
-
-  //    playerNumber = concatenate2Numbers (playerDiceRollsArray[1], playerDiceRollsArray[2]);
-
-    
-
-      // var playerNum;
-      // // If the chosen first numeral index is 1, create player number starting with 1st dice
-      // if (firstNumeralIndex === 1) {
-      // playerNum = concatenate2Numbers(diceArray[0], diceArray[1]);
-      // }
-      // // Otherwise, create player number starting with 2nd dice
-      // else {
-      // playerNum = concatenate2Numbers(diceArray[1], diceArray[0]);
-      // }
-
-
-  //     // Return an output message that tells user about their total number.
-  //     myOutputValue = 'Since you have chosen ' + userChoiceOfOrder + '. This is the total number you end up with' + playerNumber + '. Now, it is player 2 turn. Click on submit button to get dice rolls.';
-  //     console.log ('This should be the total number that user ends up with. ' + playerNumber)
-      
-  //   }
-
-  //   if (userChoiceOfOrder == '2') {
-  //     console.log ('Player has chosen the order of 2')
-  //     var playerNumber = Number(String (playerDiceRoll2) + String(playerDiceRoll1))
-  //     console.log ('This is player 1 total number.')
-
-  //     // Return an output message that tells user about their total number.
-  //     myOutputValue = 'Since you have chosen ' + userChoiceOfOrder + '. This is the total number you end up with' + playerNumber + 'Now, it is player 2 turn. Click on submit button to get dice rolls.';
-  //     console.log ('This should be the total number that user ends up with. ' + playerNumber)
-  //   }
-
-  // }
-
-
-
-
-// var playerNumber = Number(String(playerDiceRoll1) + String(playerDiceRoll2))
-//       console.log ('This is player total number.' + playerNumber)
-
-
-// check if player chooses first or second digit to be used as first number
-//     if (playerInput == 1) {
-//       var playerScore = Number(
-//         String(currentPlayerDiceNumber[0]) + String(currentPlayerDiceNumber[1])
-//       );
-//       totalScore.push(playerScore);
-//       currentPlayerDiceNumber = [];
-//       return "Player " + currentPlayer + ", your Number is: " + playerScore;
-//     } else if (playerInput == 2) {
-//       var playerScore = Number(
-//         String(currentPlayerDiceNumber[1]) + String(currentPlayerDiceNumber[0])
-//       );
-//       currentPlayerDiceNumber = [];
-//       totalScore.push(playerScore);
-//       return "Player " + currentPlayer + ", your Number is: " + playerScore;
-
+  
 
 /* ======== MAIN FUNCTION =========
 */
@@ -293,9 +242,6 @@ var main = function (input) {
 
 //   return myOutputValue;
 // };
-
-// Return a number that is the concatenation of DiceRoll1 and DiceRoll2
-//   var playerTotalNumber = Number(String (playerDiceRoll1) + String(playerDiceRoll2))
 
 
   
