@@ -129,6 +129,25 @@ console.log ('Control flow: start of generating two dice rolls for player')
   }
 
 
+  // 3. Here, we create a helper function that compares both players numbers. 
+    var comparePlayersNumbers = function () {
+
+      myOutputValue = 'Player 1 number is ' + bothPlayersNumbersInAnArray[0] + ' and Player 2 number is ' + bothPlayersNumbersInAnArray[1] + '.'
+
+    // If Player 1 and 2 draws
+    if (bothPlayersNumbersInAnArray[0] == bothPlayersNumbersInAnArray[1]){
+      return myOutputValue =  myOutputValue + '<br> So it is a draw!'
+      }
+    // If Player 1 wins
+    if (bothPlayersNumbersInAnArray[0] > bothPlayersNumbersInAnArray[1]){
+      return myOutputValue =  myOutputValue + '<br> Player 1 wins!'
+      }
+    // If player 2 wins
+    if (bothPlayersNumbersInAnArray[0] < bothPlayersNumbersInAnArray[1]){
+      return myOutputValue =  myOutputValue + '<br> Player 2 wins!'
+      }
+    }
+    
 
 
 
@@ -144,7 +163,7 @@ var main = function (input) {
   if (gameMode == gameMode1_userRollsDice){
     console.log('Control flow: start of Game mode 1.' + gameMode)
   
-    // Return an output message that tells user about their pair of dices rolled. 
+    // Call helper function genDiceRollsForPlayer. Return an output message that tells user about their pair of dices rolled. 
     myOutputValue = genDiceRollsForPlayer() ;
     console.log('This prints that helper function genDiceRollsForPlayer is called and working in the main function.')
 
@@ -158,7 +177,7 @@ var main = function (input) {
   if (gameMode == gameMode2_userPicksOrder){
     console.log ('Control flow: start of Game mode 2.' + gameMode)
 
-    //Call get player number function.
+    //Call helper function getPlayerNumber.
     myOutputValue = getPlayerNumber(input)
     console.log('This prints that helper function getPlayerNumber works.')
 
@@ -168,7 +187,6 @@ var main = function (input) {
       currentPlayer = 2
       gameMode = gameMode1_userRollsDice
       return myOutputValue + '<br> It is now player 2 turn.'
-
     }
 
     if (currentPlayer == 2){
@@ -178,7 +196,16 @@ var main = function (input) {
       return myOutputValue + '<br> Next, click on submit button to compare the players numbers.'
     }
 
-    
+  }
+
+  if (gameMode == gameMode3_weCompareBothPlayersNumbers){
+    console.log('Control flow: start of game mode 3:')
+
+    //Call get helper function comparePlayersNumbers.
+    myOutputValue = comparePlayersNumbers()
+    console.log('This prints that helper function comparePlayersNumbers works.')
+    return myOutputValue
+
   }
 
 };
