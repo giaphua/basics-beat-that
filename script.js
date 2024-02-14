@@ -1,5 +1,5 @@
 /* Gia's qns:
-1) How come in the main function, in line 118 and 131, the input in the function are different? In line 118, it is just function () while in line 131, it is functionn(input). How do we actually identify what is the right 'input' to put in?
+1) How come in the main function, in line 118 and 131, the input in the function are different? In line 118, it is just function () while in line 131, it is function(input). How do we actually identify what is the right 'input' to put in?
 
 
 /* Beat that! Game
@@ -127,6 +127,7 @@ var main = function (input) {
 
   if (gameMode == gameMode2_userPicksOrder){
     console.log ('Control flow: start of Game mode 2.' + gameMode)
+
     //Call get player number function.
     myOutputValue = getPlayerNumber(input)
     console.log('This prints that helper function genPlayerNumber works.')
